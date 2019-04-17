@@ -1,0 +1,23 @@
+server:
+  port: 9091
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mytest?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+mybatis-plus:
+  #MyBaits 别名包扫描路径，通过该属性可以给包中的类注册别名，注册后在 Mapper 对应的 XML 文件中可以直接使用类名，而不用使用全限定的类名（即 XML 中调用的时候不用包含包名）。
+  type-aliases-package: com.hlvy.mybatis_plus.entity
+  #该配置请和 typeAliasesPackage 一起使用，如果配置了该属性，则仅仅会扫描路径下以该类作为父类的域对象
+  type-aliases-super-type: java.lang.Object
+  #MyBatis Mapper 所对应的 XML 文件位置，如果您在 Mapper 中有自定义方法（XML 中有自定义实现），需要进行该配置，告诉 Mapper 所对应的 XML 文件位置。
+  mapper-locations: classpath*:mybatis/*.xml
+  #MyBatis 配置文件位置，如果您有单独的 MyBatis 配置，请将其路径配置到 configLocation 中。
+  #config-location: classpath:mybatis-config.xml
+  #启动时是否检查 MyBatis XML 文件的存在，默认不检查
+  check-config-location: false
+  global-config:
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
