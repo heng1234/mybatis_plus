@@ -74,10 +74,10 @@ public class CodeGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         //数据库连接
-        dsc.setUrl("jdbc:mysql://localhost:3306/mytest?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT");
+        dsc.setUrl("jdbc:mysql://localhost:3306/hlvy?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");//驱动
-        dsc.setUsername("root");//用户名
+        dsc.setUsername("hlvy");//用户名
         dsc.setPassword("123456");//密码
         dsc.setDbType(DbType.MYSQL);//数据库类型
 //        类型转换
@@ -161,14 +161,14 @@ public class CodeGenerator {
         strategy.setSkipView(true);//是否跳过视图
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
         //strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略, 未指定按照 naming 执行
-        strategy.setTablePrefix(new String[]{"t_"});//表前缀
+        //strategy.setTablePrefix(new String[]{"t_"});//表前缀
         //strategy.setFieldPrefix(new String[]{});//自动挡前缀
 
         //strategy.setSuperEntityClass("com.hlvy.mybatis_plus.common.BaseEntity");//自定义继承的Entity类全称，带包名
         strategy.setEntityLombokModel(false);//【实体】是否为lombok模型（默认 false）
         strategy.setRestControllerStyle(true);//Boolean类型字段是否移除is前缀（默认 false）
         //strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");//自定义继承的Controller类全称，带包名
-        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));//需要包含的表名，允许正则表达式（与exclude二选一配置）
+        strategy.setInclude(scanner("person").split(","));//需要包含的表名，允许正则表达式（与exclude二选一配置）
         //strategy.setSuperEntityColumns("id");//自定义基础的Entity类，公共字段
         strategy.setControllerMappingHyphenStyle(true);//驼峰转连字符
         strategy.setEntityTableFieldAnnotationEnable(true);//是否生成实体时，生成字段注解

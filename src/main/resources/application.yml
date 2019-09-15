@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/mytest?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis-plus:
   #MyBaits 别名包扫描路径，通过该属性可以给包中的类注册别名，注册后在 Mapper 对应的 XML 文件中可以直接使用类名，而不用使用全限定的类名（即 XML 中调用的时候不用包含包名）。
   type-aliases-package: com.hlvy.mybatis_plus.entity
@@ -18,6 +18,19 @@ mybatis-plus:
   #启动时是否检查 MyBatis XML 文件的存在，默认不检查
   check-config-location: false
   global-config:
-    db-config:
+    db-config: #配置逻辑删除
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      #id-type: none #全局策略
+      #field-strategy: ignored #所有字段加入crud语句中 一般不这么设置 默认not_null
+      #table-prefix: t_ #表的前缀
+      #table-underline: true #表名是否使用下划线
+    #configuration:#不能与config-location同时出现
+    #map-underscore-to-camel-case: true
+#设置日志 级别
+logging:
+  level:
+    root: warn
+    com.hlvy.mybatis_plus: trace
+  pattern:
+    console: '%P%m%n'
