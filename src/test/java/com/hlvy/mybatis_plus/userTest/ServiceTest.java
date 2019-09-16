@@ -35,6 +35,9 @@ public class ServiceTest {
     /**
      * 通用service
      * 查询所有user
+     * 下面是性能分析插件打印的
+     *  Consume Time：16 ms 2019-09-16 20:32:23
+     *  Execute SQL：SELECT id,name,age,email,manager_id,created_time,update_time,version FROM User WHERE id=5 AND deleted=0
      */
     @Test
     public void testSelect() {

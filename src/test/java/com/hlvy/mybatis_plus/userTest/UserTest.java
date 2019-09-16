@@ -46,6 +46,9 @@ public class UserTest {
 
     /**
      * 插入一行user
+     * 执行时间50毫秒
+     * Time：50 ms - ID：com.hlvy.mybatis_plus.mapper.UserMapper.selectById
+     * Execute SQL：SELECT id,name,age,email,manager_id,created_time,update_time,version FROM User WHERE id=5 AND deleted=0
      */
     @Test
     public void insertUser() {
@@ -63,7 +66,7 @@ public class UserTest {
      */
     @Test
     public void setectUserById() {
-      User user = userMapper.selectById(1);
+      User user = userMapper.selectById(5);
         System.out.println(user.toString());
     }
     /**

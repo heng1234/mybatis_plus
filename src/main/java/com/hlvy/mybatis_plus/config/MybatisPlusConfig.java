@@ -13,6 +13,7 @@ import net.sf.jsqlparser.expression.LongValue;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
@@ -39,12 +40,15 @@ public class MybatisPlusConfig {
         return new OptimisticLockerInterceptor();
     }
     /**
-     * SQL执行效率插件
+     * SQL执行效率插件 性能分析插件
      */
     @Bean
-    //@Profile({"dev","test"})// 设置 dev test 环境开启
+    @Profile({"dev","test"})// 设置 dev test 环境开启
     public PerformanceInterceptor performanceInterceptor() {
-        return new PerformanceInterceptor();
+        PerformanceInterceptor performanceInterceptor =  new PerformanceInterceptor();
+        performanceInterceptor.setFormat(true);//格式化语句
+        //performanceInterceptor.setMaxTime(5);//执行时间超过多少秒会抛出异常
+        return  performanceInterceptor;
     }
 
     /**
