@@ -63,6 +63,9 @@ public class UserTest {
 
     /**
      * 根据id查询
+     * 多租户测试
+     *  Consume Time：13 ms 2019-09-17 22:53:39
+     *  Execute SQL：SELECT id, name, age, email, manager_id, created_time, update_time, version FROM User WHERE User.manager_id = 5 AND id = 5 AND deleted = 0
      */
     @Test
     public void setectUserById() {

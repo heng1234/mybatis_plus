@@ -2,6 +2,8 @@ package com.hlvy.mybatis_plus.config;
 
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
+import com.baomidou.mybatisplus.core.parser.ISqlParserFilter;
+import com.baomidou.mybatisplus.core.parser.SqlParserHelper;
 import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
@@ -10,6 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,57 +70,58 @@ public class MybatisPlusConfig {
 
     @Bean
     public PaginationInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
-    }
-
-   // @Bean
-    public PaginationInterceptor paginationInterceptor1() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
-        //paginationInterceptor.setLocalPage(true);// 开启 PageHelper 的支持
         /*
          * 【测试多租户】 SQL 解析处理拦截器<br>
          * 这里固定写成住户 1 实际情况你可以从cookie读取，因此数据看不到 【 麻花藤 】 这条记录（ 注意观察 SQL ）<br>
          */
-        List<ISqlParser> sqlParserList = new ArrayList<>();
+      /*  List<ISqlParser> sqlParserList = new ArrayList<>();
         TenantSqlParser tenantSqlParser = new TenantSqlParser();
         tenantSqlParser.setTenantHandler(new TenantHandler() {
+           *//* @Override
+            public Expression getTenantId(boolean where) {
+                // 该 where 条件 3.2.0 版本开始添加的，用于分区是否为在 where 条件中使用
+                // 此判断用于支持返回多个租户 ID 场景，具体使用查看示例工程
+                return new LongValue(1L);
+            }*//*
+
             @Override
             public Expression getTenantId() {
-                return new LongValue(1L);
+                return new LongValue(5L);//传入的值一般都是配置文件 静态变量或者session中取出
             }
 
-            /**
-             * 设置id名字
-             * @return
-             */
             @Override
             public String getTenantIdColumn() {
-                return "id";
+                return "manager_id";//多租户字段
             }
 
             @Override
             public boolean doTableFilter(String tableName) {
                 // 这里可以判断是否过滤表
-            /*
+            *//*
             if ("user".equals(tableName)) {
                 return true;
-            }*/
+            }*//*
                 return false;
             }
         });
         sqlParserList.add(tenantSqlParser);
         paginationInterceptor.setSqlParserList(sqlParserList);
-      /*  paginationInterceptor.setSqlParserFilter(new ISqlParserFilter() {
+
+        paginationInterceptor.setSqlParserFilter(new ISqlParserFilter() {
             @Override
             public boolean doFilter(MetaObject metaObject) {
                 MappedStatement ms = SqlParserHelper.getMappedStatement(metaObject);
                 // 过滤自定义查询此时无租户信息约束【 麻花藤 】出现
-                if ("com.baomidou.springboot.mapper.UserMapper.selectListBySQL".equals(ms.getId())) {
+                //你要过滤的userMapper里的方法
+                if ("com.hlvy.mybatis_plus.mapper.UserMapper.selectById".equals(ms.getId())) {
                     return true;
                 }
                 return false;
             }
         });*/
-        return paginationInterceptor;
+        return  paginationInterceptor;
     }
+
+
 }
