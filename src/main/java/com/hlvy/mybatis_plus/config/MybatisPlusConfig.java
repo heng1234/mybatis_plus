@@ -1,18 +1,12 @@
 package com.hlvy.mybatis_plus.config;
 
-import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
-import com.baomidou.mybatisplus.core.parser.ISqlParserFilter;
-import com.baomidou.mybatisplus.core.parser.SqlParserHelper;
-import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
+import com.baomidou.mybatisplus.extension.parsers.DynamicTableNameParser;
+import com.baomidou.mybatisplus.extension.parsers.ITableNameHandler;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
-import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
-import org.apache.ibatis.mapping.MappedStatement;
+import com.hlvy.mybatis_plus.injector.MySqlInjector;
 import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +15,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * MybatisPlusConfig
@@ -35,6 +31,7 @@ import java.util.List;
 @MapperScan("com.hlvy.mybatis_plus.mapper")
 public class MybatisPlusConfig {
 
+public static ThreadLocal<String> myTableName = new ThreadLocal<>();
     /**
      * 乐观锁插件
      * @return
@@ -120,8 +117,29 @@ public class MybatisPlusConfig {
                 return false;
             }
         });*/
+        /*动态表名*/
+        List<ISqlParser> sqlParserList = new ArrayList<>();
+        DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
+        Map<String, ITableNameHandler> tableNameHandlerMap = new HashMap<>();
+        tableNameHandlerMap.put("User", new ITableNameHandler() {
+            @Override
+            public String dynamicTableName(MetaObject metaObject, String sql, String tableName) {
+                return myTableName.get();//返回null不会替换 注意 多租户过滤会将它一块过滤不会替换@SqlParser(filter=true) 可不会替换
+            }
+        });
+        dynamicTableNameParser.setTableNameHandlerMap(tableNameHandlerMap);
+        sqlParserList.add(dynamicTableNameParser);
+        paginationInterceptor.setSqlParserList(sqlParserList);
+
         return  paginationInterceptor;
     }
 
-
+    /**
+     * 自定义 SqlInjector
+     * 里面包含自定义的全局方法
+     */
+    @Bean
+    public MySqlInjector myLogicSqlInjector() {
+        return new MySqlInjector();
+    }
 }

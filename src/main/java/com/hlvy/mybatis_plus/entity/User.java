@@ -38,7 +38,7 @@ public class User  extends Model<User> {
     /**
      * 年龄
      */
-    @TableField(condition = "%s&lt;#{%s}")
+    @TableField(condition = "%s&lt;#{%s}",fill=FieldFill.UPDATE)
     private Integer age;
 
     /**

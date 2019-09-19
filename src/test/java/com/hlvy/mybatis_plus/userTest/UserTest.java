@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.additional.update.impl.LambdaUpdateChainWrapper;
+import com.hlvy.mybatis_plus.MybatisPlusApplication;
+import com.hlvy.mybatis_plus.config.MybatisPlusConfig;
 import com.hlvy.mybatis_plus.entity.User;
 import com.hlvy.mybatis_plus.mapper.UserMapper;
 import org.junit.Assert;
@@ -38,6 +40,7 @@ public class UserTest {
      */
     @Test
     public void testSelect() {
+        MybatisPlusConfig.myTableName.set("user2019");
         System.out.println(("----- selectAll method test ------"));
         List<User> userList = userMapper.selectList(null);
       //  Assert.assertEquals(5, userList.size());
